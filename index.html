@@ -1,0 +1,151 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fishao</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section id="loginScreen" class="login-screen" aria-label="Login de Fishao">
+      <div class="login-frame">
+        <img class="login-art" src="assets/login-screen.png" alt="" aria-hidden="true" />
+        <form id="loginForm" class="login-form">
+          <label class="sr-only" for="loginUser">Usuario</label>
+          <input id="loginUser" class="login-input login-user" type="text" autocomplete="username" spellcheck="false" aria-label="Usuario" placeholder=" " />
+          <label class="sr-only" for="loginPassword">Contraseña</label>
+          <input id="loginPassword" class="login-input login-password" type="password" autocomplete="current-password" aria-label="Contraseña" placeholder=" " />
+          <button id="loginButton" class="login-button" type="submit" aria-label="Login"></button>
+          <p id="loginStatus" class="login-status" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+    <main class="game-shell">
+      <section class="game-panel" aria-label="Fishao">
+        <div class="topbar">
+          <div>
+            <h1>Fishao</h1>
+            <p>Explora el muelle, pesca en el agua, navega hasta Isla Coral y baja a la cueva.</p>
+          </div>
+          <div class="stats" aria-live="polite">
+            <span id="fishCount">Peces: 0</span>
+            <span id="goldCount">Oro: 0</span>
+            <span id="woodCount">Madera: 0</span>
+            <div class="energy-stat" aria-label="Energia">
+              <span id="energyText">Energia</span>
+              <div class="energy-bar">
+                <div id="energyFill"></div>
+              </div>
+            </div>
+            <div class="mana-stat" aria-label="Mana">
+              <span id="manaText">Mana</span>
+              <div class="mana-bar">
+                <div id="manaFill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stage-wrap">
+          <div id="levelHud" class="level-hud" title="0/300 EXP para pasar al nivel 2">
+            <strong id="levelText">Nivel 1</strong>
+            <div class="xp-track" aria-label="Experiencia">
+              <div id="xpFill"></div>
+            </div>
+            <span id="xpPercent">0%</span>
+          </div>
+          <button id="questButton" class="quest-button" type="button" aria-label="Mision activa" title="Mision activa">?</button>
+          <button id="inventoryButton" class="inventory-button" type="button" aria-label="Inventario" title="Inventario">🎒</button>
+          <div id="questPanel" class="quest-panel" aria-label="Mision activa">
+            <div class="quest-header">
+              <strong>Mision activa</strong>
+              <button id="closeQuest" type="button">Cerrar</button>
+            </div>
+            <h3 id="questTitle">Primeros pasos</h3>
+            <p id="questText">Acercate al vendedor y compra tu primera caña basica de pesca.</p>
+            <div class="quest-progress">
+              <span id="questProgressText">Progreso: 0/1</span>
+              <div class="quest-track"><div id="questProgressFill"></div></div>
+            </div>
+          </div>
+          <div id="inventoryPanel" class="inventory-panel" aria-label="Inventario">
+            <div class="inventory-header">
+              <strong>Inventario</strong>
+              <button id="closeInventory" type="button">Cerrar</button>
+            </div>
+            <div id="inventoryGrid" class="inventory-grid"></div>
+          </div>
+          <canvas id="game" width="768" height="576" aria-label="Mapa jugable"></canvas>
+          <input
+            id="chatInput"
+            class="chat-input"
+            type="text"
+            maxlength="80"
+            autocomplete="off"
+            spellcheck="false"
+            aria-label="Mensaje de chat"
+            placeholder="Escribir mensaje..."
+          />
+          <div id="toast" class="toast" role="status" aria-live="polite">Click derecho al aguita.</div>
+          <div id="shopModal" class="shop-modal" aria-live="polite" aria-label="Tienda del vendedor">
+            <div class="shop-header">
+              <strong>&lt;Vendedor&gt;</strong>
+              <button id="closeShop" type="button">Cerrar</button>
+            </div>
+            <div class="shop-item">
+              <div>
+                <strong>Caña basica</strong>
+                <span>20 monedas de oro</span>
+              </div>
+              <button id="buyRod" type="button">Comprar</button>
+            </div>
+            <div class="shop-item">
+              <div>
+                <strong>Barca Basica</strong>
+                <span>500 monedas de oro</span>
+              </div>
+              <button id="buyBoat" type="button">Comprar</button>
+            </div>
+            <p id="shopStatus">Equipo de pesca inicial.</p>
+          </div>
+          <div id="tutorialModal" class="tutorial-modal" aria-live="polite" aria-label="Mision tutorial">
+            <div class="tutorial-card">
+              <span class="tutorial-eyebrow">Mision inicial</span>
+              <h2 id="tutorialTitle">Bienvenido a Fishao!</h2>
+              <p id="tutorialText">Tu aventura comienza aqui! Para comenzar acercate al vendedor y compra tu primera caña basica de pesca.</p>
+              <button id="acceptTutorial" type="button">Entendido!</button>
+            </div>
+          </div>
+          <div id="characterMenu" class="character-menu" aria-label="Seleccion de personaje">
+            <div class="character-card">
+              <h2>Seleccion de personaje</h2>
+              <div id="characterSlots" class="character-slots"></div>
+              <div class="character-actions">
+                <button id="enterWorld" type="button">Entrar al mundo</button>
+                <button id="createCharacter" type="button">Crear personaje</button>
+              </div>
+              <div id="creationPanel" class="creation-panel">
+                <label for="characterName">Nombre</label>
+                <div>
+                  <input id="characterName" type="text" maxlength="16" autocomplete="off" />
+                  <button id="confirmCreate" type="button">Crear</button>
+                </div>
+              </div>
+              <p id="characterStatus">Marlin esta listo para entrar.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottombar">
+          <button id="backToCharacters" type="button">Personajes</button>
+          <button id="toggleBoat" type="button">Barca automatica</button>
+          <button id="resetGame" type="button">Reiniciar</button>
+          <span id="status">Enter para chatear. WASD o flechas para caminar.</span>
+        </div>
+      </section>
+    </main>
+
+    <script src="game.js"></script>
+  </body>
+</html>
+
